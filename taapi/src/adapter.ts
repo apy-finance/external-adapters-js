@@ -36,11 +36,7 @@ export const execute: Execute = async (input) => {
     params,
   }
 
-  const { data } = await Requester.request(config)
-  data.result = Requester.validateResultNumber(data, ['value'])
-  return Requester.success(jobRunID, {
-    data,
-    result: data.result,
-    status: 200,
-  })
+  const response = await Requester.request(config)
+  response.data.result = Requester.validateResultNumber(response.data, ['value'])
+  return Requester.success(jobRunID, response)
 }
