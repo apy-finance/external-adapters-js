@@ -26,7 +26,7 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const result = Requester.validateResultNumber(data, ['ticker'])
 
   return Requester.success(jobRunID, {
-    data: { result },
+    data: { ...data, result },
     result,
     status: 200,
   })
