@@ -21,9 +21,7 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const jobRunID = validator.validated.id
 
   let symbol = validator.validated.data.base.toUpperCase()
-  if (commonKeys[symbol]) {
-    symbol = commonKeys[symbol]
-  }
+  symbol = commonKeys[symbol] || symbol
   const data = await google.getSymbol(symbol)
   const result = Requester.validateResultNumber(data, ['ticker'])
 
