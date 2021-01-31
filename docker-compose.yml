@@ -2,20 +2,18 @@ version: "3.9"  # optional since v1.27.0
 services:
   db:
     image: postgres
-    expose:
-        - "5432"
+    ports:
+        - "5432:5432"
     environment:
         - POSTGRES_HOST_AUTH_METHOD=trust
-    # network_mode: host
     volumes:
         - "db-data:/var/lib/postgresql/data"
     tty: true
 
   node:
     image: smartcontract/chainlink:0.9.4
-    # network_mode: host
-    expose:
-        - "6688"
+    ports:
+        - "6688:6688"
     depends_on:
         - db
     env_file:
