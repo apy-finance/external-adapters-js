@@ -1,25 +1,25 @@
-version: "3.9"  # optional since v1.27.0
+version: '3.9' # optional since v1.27.0
 services:
   db:
     image: postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-      - "db-data:/var/lib/postgresql/data"
+      - 'db-data:/var/lib/postgresql/data'
     tty: true
 
   node:
     image: smartcontract/chainlink:0.9.4
     ports:
-      - "6688:6688"
+      - '6688:6688'
     depends_on:
       - db
     env_file:
       - ./chainlink.env
     volumes:
-      - "node-data:/chainlink"
+      - 'node-data:/chainlink'
     tty: true
     stdin_open: true
 
@@ -30,13 +30,14 @@ services:
         - name=apy-finance
         - adapter=composite/apy-finance
     ports:
-      - "8080:8080"
-    depends_on:
-      - node
+      - '8080:8080'
+    environment:
+      - RPC_URL=http://docker.for.mac.localhost:8545
+      - REGISTRY_ADDRESS=0x7ec81b7035e91f8435bdeb2787dcbd51116ad303
+      - DATA_PROVIDER=coingecko
     tty: true
     stdin_open: true
 
 volumes:
   db-data:
   node-data:
-
