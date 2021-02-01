@@ -12,6 +12,7 @@ services:
 
   node:
     image: smartcontract/chainlink:0.9.4
+    command: local n -p /run/secrets/chainlink_password -a /run/secrets/chainlink_api
     ports:
       - '6688:6688'
     depends_on:
@@ -20,6 +21,9 @@ services:
       - ./chainlink.env
     volumes:
       - 'node-data:/chainlink'
+    secrets:
+      - chainlink_password
+      - chainlink_api
     tty: true
     stdin_open: true
 
@@ -37,6 +41,12 @@ services:
       - DATA_PROVIDER=coingecko
     tty: true
     stdin_open: true
+
+secrets:
+  chainlink_password:
+    file: ./.password
+  chainlink_api:
+    file: ./.api
 
 volumes:
   db-data:
