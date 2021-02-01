@@ -3,27 +3,40 @@ services:
   db:
     image: postgres
     ports:
-        - "5432:5432"
+      - "5432:5432"
     environment:
-        - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-        - "db-data:/var/lib/postgresql/data"
+      - "db-data:/var/lib/postgresql/data"
     tty: true
 
   node:
     image: smartcontract/chainlink:0.9.4
     ports:
-        - "6688:6688"
+      - "6688:6688"
     depends_on:
-        - db
+      - db
     env_file:
-        - ./chainlink.env
+      - ./chainlink.env
     volumes:
-        - "node-data:/chainlink"
+      - "node-data:/chainlink"
+    tty: true
+    stdin_open: true
+
+  adapter:
+    build:
+      context: .
+      args:
+        - name=apy-finance
+        - adapter=composite/apy-finance
+    ports:
+      - "8080:8080"
+    depends_on:
+      - node
     tty: true
     stdin_open: true
 
 volumes:
-    db-data:
-    node-data:
+  db-data:
+  node-data:
 
