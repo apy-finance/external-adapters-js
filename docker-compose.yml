@@ -12,7 +12,9 @@ services:
 
   node:
     image: smartcontract/chainlink:0.9.4
-    command: local n -p /run/secrets/chainlink_password -a /run/secrets/chainlink_api
+    entrypoint: >
+      bash -c "chainlink local import /run/secrets/chainlink_key &&
+      chainlink local n -p /run/secrets/chainlink_password -a /run/secrets/chainlink_api"
     ports:
       - '6688:6688'
     depends_on:
@@ -24,6 +26,9 @@ services:
     secrets:
       - chainlink_password
       - chainlink_api
+      # Node address for this key:
+      # 0xAD702b65733aC8BcBA2be6d9Da94d5b7CE25C0bb
+      - chainlink_key
     tty: true
     stdin_open: true
 
@@ -47,6 +52,8 @@ secrets:
     file: ./.password
   chainlink_api:
     file: ./.api
+  chainlink_key:
+    file: ./keystore.json
 
 volumes:
   db-data:
