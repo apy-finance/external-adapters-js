@@ -1,0 +1,37 @@
+{
+  "initiators": [
+    {
+      "type": "fluxmonitor",
+      "params": {
+        "address": "0x344D5d70fc3c3097f82d1F26464aaDcEb30C6AC7",
+        "requestData": {
+          "data": {}
+        },
+        "feeds": [
+          {
+            "bridge": "apy-finance"
+          }
+        ],
+        "threshold": 1,
+        "absoluteThreshold": 0,
+        "precision": 18,
+        "pollTimer": {
+          "period": "1m0s"
+        },
+        "idleTimer": {
+          "disabled": true,
+          "duration": "0s"
+        }
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "type": "noop",
+      "confirmations": null,
+      "params": {}
+    }
+  ],
+  "startAt": null,
+  "endAt": null
+}
