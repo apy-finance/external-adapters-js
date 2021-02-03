@@ -106,7 +106,7 @@ nuke_chainlink:
 	@read -r -p "WARNING: this will delete all chainlink data (ctrl-c to exit / any other key to continue)." input
 	@make down
 	@docker-compose rm --force --stop -v node
-	@docker volume rm external-adapters-js_chainlink-data
+	@docker volume rm external-adapters-js_node-data
 	@echo "Chainlink volume deleted 💣"
 
 .PHONY: nuke_db
@@ -114,7 +114,7 @@ nuke_db:
 	@read -r -p "WARNING: this will delete all data from Postgres (ctrl-c to exit / any other key to continue)." input
 	@make down
 	@docker-compose rm --force --stop -v db
-	@docker volume rm external_adapters-js_db-data
+	@docker volume rm external-adapters-js_db-data
 	@echo "Postgres data deleted 💣"
 
 # https://stackoverflow.com/a/51866793/1175053
@@ -130,7 +130,3 @@ ps:
 create_job:
 	bash ./create_job.sh
 
-.PHONY: start_node
-start_node:
-	make up
-	make create_job
