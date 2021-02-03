@@ -13,22 +13,17 @@ services:
   node:
     image: smartcontract/chainlink:0.9.4
     entrypoint: >
-      bash -c "chainlink local import /run/secrets/chainlink_key &&
-      chainlink local n -p /run/secrets/chainlink_password -a /run/secrets/chainlink_api"
+      bash -c "chainlink local import /docker/keystore.json &&
+      chainlink local n -p /docker/password -a /docker/api"
     ports:
       - '6688:6688'
     depends_on:
       - db
     env_file:
-      - ./chainlink.env
+      - ./docker/chainlink.env
     volumes:
       - 'node-data:/chainlink'
-    secrets:
-      - chainlink_password
-      - chainlink_api
-      # Node address for this key:
-      # 0xAD702b65733aC8BcBA2be6d9Da94d5b7CE25C0bb
-      - chainlink_key
+      - './docker:/docker'
     tty: true
     stdin_open: true
 
@@ -47,14 +42,6 @@ services:
       - DATA_PROVIDER=coingecko
     tty: true
     stdin_open: true
-
-secrets:
-  chainlink_password:
-    file: ./.password
-  chainlink_api:
-    file: ./.api
-  chainlink_key:
-    file: ./keystore.json
 
 volumes:
   db-data:
