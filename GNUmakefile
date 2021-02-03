@@ -1,9 +1,3 @@
-# ANSI escape codes
-BOLD := \033[1m
-RESET := \033[0m
-REVERSE := \033[7m
-RED := \033[0;31m
-
 .DEFAULT_GOAL := help
 
 SHELL := bash
@@ -99,7 +93,6 @@ clean:
 	@echo "Deleting dangling images..."
 	docker images -q -f dangling=true | xargs docker rmi
 	@echo "All clean 🛀"
-
 
 .PHONY: nuke_chainlink
 nuke_chainlink:
