@@ -2,6 +2,8 @@
 
 SHELL := bash
 
+DOCKERHOST := $(shell ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $$2 }' | cut -f2 -d: | head -n1)
+
 .PHONY: help
 help:
 	@echo ""
@@ -35,7 +37,7 @@ build:
 
 .PHONY: up
 up:
-	docker-compose up -d
+	DOCKERHOST=$(DOCKERHOST) docker-compose up -d
 	@make logs
 
 .PHONY: down

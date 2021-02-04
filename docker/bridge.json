@@ -1,5 +1,5 @@
 {
   "name": "apy-finance",
   "method": "GET",
-  "url": "http://docker.for.mac.localhost:8080"
+  "url": "http://dockerhost:8080"
 }

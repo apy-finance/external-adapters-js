@@ -27,6 +27,8 @@ services:
       - './docker:/docker'
     tty: true
     stdin_open: true
+    extra_hosts:
+      - 'dockerhost:$DOCKERHOST'
 
   adapter:
     build:
@@ -37,12 +39,14 @@ services:
     ports:
       - '8080:8080'
     environment:
-      - RPC_URL=http://docker.for.mac.localhost:8545
+      - RPC_URL=http://dockerhost:8545
       # - RPC_URL=https://mainnet.infura.io/v3/85b3b7f350b448c58c7e36709521f6da
       - REGISTRY_ADDRESS=0x7ec81b7035e91f8435bdeb2787dcbd51116ad303
       - DATA_PROVIDER=coingecko
     tty: true
     stdin_open: true
+    extra_hosts:
+      - 'dockerhost:$DOCKERHOST'
 
 volumes:
   db-data:
