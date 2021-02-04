@@ -13,7 +13,8 @@ services:
   node:
     image: smartcontract/chainlink:0.9.4
     entrypoint: >
-      bash -c "chainlink local import /docker/keystore.json &&
+      bash -c "while !</dev/tcp/db/5432; do sleep 1; done;
+      chainlink local import /docker/keystore.json &&
       chainlink local n -p /docker/password -a /docker/api"
     ports:
       - '6688:6688'
