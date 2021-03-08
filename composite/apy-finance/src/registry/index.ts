@@ -10,11 +10,11 @@ export type GetAllocations = (
 ) => () => Promise<types.TokenAllocations>
 
 const getAllocations: GetAllocations = (registry, decimalsOf) => async () => {
-  const tokenAddresses = await registry.getTokenAddresses()
+  const allocationIds = await registry.getAssetAllocationIds()
   const [components, balances, decimals]: any = await Promise.all([
-    Promise.all(tokenAddresses.map((address: string) => registry.symbolOf(address))),
-    Promise.all(tokenAddresses.map((address: string) => registry.balanceOf(address))),
-    Promise.all(tokenAddresses.map(async (address: string) => decimalsOf(address))),
+    Promise.all(allocationIds.map((id: string) => registry.symbolOf(id))),
+    Promise.all(allocationIds.map((id: string) => registry.balanceOf(id))),
+    Promise.all(allocationIds.map(async (id: string) => decimalsOf(id))),
   ])
 
   return components.map((symbol: string, i: number) => ({
