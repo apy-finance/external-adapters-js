@@ -10,11 +10,26 @@ export type GetAllocations = (
 ) => () => Promise<types.TokenAllocations>
 
 const getAllocations: GetAllocations = (registry, decimalsOf) => async () => {
+  const customDecimalsOf = async (id: string, symbolOf: any) => {
+    const symbol = await symbolOf(id);
+    if (symbol == "DAI") {
+      return 18;
+    } else if (symbol == "USDC") {
+      return 6;
+    } else if (symbol == "USDT") {
+      return 6;
+    } else if (symbol == "CRV") {
+      return 18;
+    } else {
+      return decimalsOf(id);
+    }
+  }
+
   const allocationIds = await registry.getAssetAllocationIds()
   const [components, balances, decimals]: any = await Promise.all([
     Promise.all(allocationIds.map((id: string) => registry.symbolOf(id))),
     Promise.all(allocationIds.map((id: string) => registry.balanceOf(id))),
-    Promise.all(allocationIds.map(async (id: string) => decimalsOf(id))),
+    Promise.all(allocationIds.map(async (id: string) => customDecimalsOf(id, registry.symbolOf))),
   ])
 
   return components.map((symbol: string, i: number) => ({
