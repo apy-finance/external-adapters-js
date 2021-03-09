@@ -6,30 +6,14 @@ import { types } from '@chainlink/token-allocation-adapter'
 
 export type GetAllocations = (
   registry: ethers.Contract,
-  decimalsOf: (address: string) => Promise<number>,
 ) => () => Promise<types.TokenAllocations>
 
-const getAllocations: GetAllocations = (registry, decimalsOf) => async () => {
-  const customDecimalsOf = async (id: string, symbolOf: any) => {
-    const symbol = await symbolOf(id);
-    if (symbol == "DAI") {
-      return 18;
-    } else if (symbol == "USDC") {
-      return 6;
-    } else if (symbol == "USDT") {
-      return 6;
-    } else if (symbol == "CRV") {
-      return 18;
-    } else {
-      return decimalsOf(id);
-    }
-  }
-
+const getAllocations: GetAllocations = (registry) => async () => {
   const allocationIds = await registry.getAssetAllocationIds()
   const [components, balances, decimals]: any = await Promise.all([
     Promise.all(allocationIds.map((id: string) => registry.symbolOf(id))),
     Promise.all(allocationIds.map((id: string) => registry.balanceOf(id))),
-    Promise.all(allocationIds.map(async (id: string) => customDecimalsOf(id, registry.symbolOf))),
+    Promise.all(allocationIds.map(async (id: string) => registry.decimalsOf(id))),
   ])
 
   return components.map((symbol: string, i: number) => ({
@@ -57,7 +41,7 @@ const makeRegistry = async (address: string, rpcUrl: string): Promise<Registry> 
   const _decimalsOf = (address: string) => _getERC20(address).decimals()
 
   return {
-    getAllocations: getAllocations(chainlinkRegistry, _decimalsOf),
+    getAllocations: getAllocations(chainlinkRegistry),
   }
 }
 
