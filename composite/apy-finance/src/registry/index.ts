@@ -13,13 +13,13 @@ const getAllocations: GetAllocations = (registry) => async () => {
   const [components, balances, decimals]: any = await Promise.all([
     Promise.all(allocationIds.map((id: string) => registry.symbolOf(id))),
     Promise.all(allocationIds.map((id: string) => registry.balanceOf(id))),
-    Promise.all(allocationIds.map(async (id: string) => registry.decimalsOf(id))),
+    Promise.all(allocationIds.map((id: string) => registry.decimalsOf(id))),
   ])
 
   return components.map((symbol: string, i: number) => ({
     symbol,
     balance: BigNumber.from(balances[i]),
-    decimals: decimals[i],
+    decimals: decimals[i].toNumber()
   }))
 }
 
